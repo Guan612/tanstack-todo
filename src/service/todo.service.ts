@@ -1,5 +1,5 @@
 import { prisma } from '#/db'
-import type { CreateTodoInput, UpdateTodoInput } from '#/types/todo'
+import type { CreateTodoInput, UpdateTodoBodyInput } from '#/types/todo'
 
 export const TodoService = {
   async getUserTodos(userId: string) {
@@ -15,7 +15,7 @@ export const TodoService = {
     })
   },
 
-  async updateTodo(id: number, userId: string, data: UpdateTodoInput) {
+  async updateTodo(id: number, userId: string, data: UpdateTodoBodyInput) {
     return prisma.todo.update({
       where: { id: id, userId: userId },
       data: { ...data },
