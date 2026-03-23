@@ -11,7 +11,7 @@ model Todo {
   id        Int      @id @default(autoincrement())
   userId    String
   title     String
-  context   String?
+  description String?
   done      Boolean  @default(false)
   createdAt DateTime @default(now())
 
