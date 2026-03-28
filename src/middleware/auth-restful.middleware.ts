@@ -6,7 +6,7 @@ export const authRouteMiddleware = createMiddleware().server(
     const session = await requireSessionFromRequest(request)
 
     if (!session) {
-      return Response.json({ message: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     return next({

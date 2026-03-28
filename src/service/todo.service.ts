@@ -15,6 +15,12 @@ export const TodoService = {
     })
   },
 
+  async getTodoById(id: number, userId: string) {
+    return prisma.todo.findUnique({
+      where: { id, userId },
+    })
+  },
+
   async updateTodo(id: number, userId: string, data: UpdateTodoBodyInput) {
     return prisma.todo.update({
       where: { id: id, userId: userId },
