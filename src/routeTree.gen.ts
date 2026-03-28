@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubRouteImport } from './routes/_sub'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as ApiTodosIndexRouteImport } from './routes/api/todos/index'
 import { Route as SubTodoIndexRouteImport } from './routes/_sub/todo/index'
+import { Route as ApiTodosIdRouteImport } from './routes/api/todos/$id'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as SubAuthRegisterRouteImport } from './routes/_sub/auth/register'
 import { Route as SubAuthLoginRouteImport } from './routes/_sub/auth/login'
@@ -30,10 +32,20 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const ApiTodosIndexRoute = ApiTodosIndexRouteImport.update({
+  id: '/api/todos/',
+  path: '/api/todos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SubTodoIndexRoute = SubTodoIndexRouteImport.update({
   id: '/todo/',
   path: '/todo/',
   getParentRoute: () => SubRoute,
+} as any)
+const ApiTodosIdRoute = ApiTodosIdRouteImport.update({
+  id: '/api/todos/$id',
+  path: '/api/todos/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -56,14 +68,18 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof SubAuthLoginRoute
   '/auth/register': typeof SubAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/todos/$id': typeof ApiTodosIdRoute
   '/todo/': typeof SubTodoIndexRoute
+  '/api/todos/': typeof ApiTodosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
   '/auth/login': typeof SubAuthLoginRoute
   '/auth/register': typeof SubAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/todos/$id': typeof ApiTodosIdRoute
   '/todo': typeof SubTodoIndexRoute
+  '/api/todos': typeof ApiTodosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -73,13 +89,29 @@ export interface FileRoutesById {
   '/_sub/auth/login': typeof SubAuthLoginRoute
   '/_sub/auth/register': typeof SubAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/todos/$id': typeof ApiTodosIdRoute
   '/_sub/todo/': typeof SubTodoIndexRoute
+  '/api/todos/': typeof ApiTodosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/login' | '/auth/register' | '/api/auth/$' | '/todo/'
+  fullPaths:
+    | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/api/auth/$'
+    | '/api/todos/$id'
+    | '/todo/'
+    | '/api/todos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/auth/register' | '/api/auth/$' | '/todo'
+  to:
+    | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/api/auth/$'
+    | '/api/todos/$id'
+    | '/todo'
+    | '/api/todos'
   id:
     | '__root__'
     | '/_layout'
@@ -88,13 +120,17 @@ export interface FileRouteTypes {
     | '/_sub/auth/login'
     | '/_sub/auth/register'
     | '/api/auth/$'
+    | '/api/todos/$id'
     | '/_sub/todo/'
+    | '/api/todos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
   SubRoute: typeof SubRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiTodosIdRoute: typeof ApiTodosIdRoute
+  ApiTodosIndexRoute: typeof ApiTodosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -120,12 +156,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/api/todos/': {
+      id: '/api/todos/'
+      path: '/api/todos'
+      fullPath: '/api/todos/'
+      preLoaderRoute: typeof ApiTodosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_sub/todo/': {
       id: '/_sub/todo/'
       path: '/todo'
       fullPath: '/todo/'
       preLoaderRoute: typeof SubTodoIndexRouteImport
       parentRoute: typeof SubRoute
+    }
+    '/api/todos/$id': {
+      id: '/api/todos/$id'
+      path: '/api/todos/$id'
+      fullPath: '/api/todos/$id'
+      preLoaderRoute: typeof ApiTodosIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -180,6 +230,8 @@ const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
   SubRoute: SubRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiTodosIdRoute: ApiTodosIdRoute,
+  ApiTodosIndexRoute: ApiTodosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
