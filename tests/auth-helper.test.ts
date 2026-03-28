@@ -13,6 +13,7 @@ vi.mock('#/lib/auth', () => ({
 }))
 
 import {
+  getCurrentSession,
   getUserFromRequest,
   requireSessionFromRequest,
 } from '../src/middleware/auth'
@@ -60,5 +61,21 @@ describe('auth helpers', () => {
 
     await expect(requireSessionFromRequest(request)).resolves.toBeNull()
     await expect(getUserFromRequest(request)).resolves.toBeNull()
+  })
+
+  it('returns the current session from request headers for route guards', async () => {
+    const request = new Request('https://example.com/todo', {
+      headers: {
+        cookie: 'session=xyz',
+      },
+    })
+    const session = {
+      session: { id: 'session-3' },
+      user: { id: 'user-3', email: 'lin@example.com' },
+    }
+
+    getSession.mockResolvedValue(session)
+
+    await expect(getCurrentSession(request)).resolves.toEqual(session)
   })
 })

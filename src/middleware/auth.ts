@@ -13,3 +13,7 @@ export async function getUserFromRequest(request: Request) {
 
   return session?.user ?? null
 }
+
+export async function getCurrentSession(request: Request) {
+  return requireSessionFromRequest(request)
+}
