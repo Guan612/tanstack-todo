@@ -1,3 +1,4 @@
+import { getSafeRedirect } from '#/lib/auth-redirect'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { createPageHead } from '../../../lib/page-head'
@@ -12,6 +13,9 @@ import { Input } from '#/components/ui/input'
 import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/_sub/auth/login')({
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === 'string' ? search.redirect : undefined,
+  }),
   head: createPageHead('登录'),
   component: RouteComponent,
 })
@@ -42,7 +46,8 @@ function FieldInfo({
 }
 
 function RouteComponent() {
-  const { mutate, isPending } = useLogin()
+  const search = Route.useSearch()
+  const { mutate, isPending } = useLogin(getSafeRedirect(search))
   const form = useForm({
     defaultValues: {
       email: '',

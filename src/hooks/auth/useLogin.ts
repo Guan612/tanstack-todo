@@ -1,10 +1,11 @@
 import { authClient } from '#/lib/auth-client'
+import { normalizeRedirect } from '#/lib/auth-redirect'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner' // 假设你用 sonner 或其他 toast 库
 import type { Login } from '#/types/auth'
 import { useMutation } from '@tanstack/react-query'
 
-export function useLogin() {
+export function useLogin(redirectTo?: string) {
   const navigate = useNavigate()
 
   return useMutation({
@@ -22,7 +23,7 @@ export function useLogin() {
     },
     onSuccess: () => {
       toast.success('登录成功！')
-      navigate({ to: '/' })
+      navigate({ to: normalizeRedirect(redirectTo) })
     },
     onError: (error: any) => {
       // 这里可以统一处理 Better-Auth 的错误码
